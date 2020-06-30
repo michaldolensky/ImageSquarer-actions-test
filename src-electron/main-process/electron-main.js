@@ -1,4 +1,19 @@
 import { app, BrowserWindow, nativeTheme } from 'electron';
+import sharp from 'sharp';
+import chokidar from 'chokidar';
+import path from 'path';
+import fs from 'fs';
+
+require('dotenv').config();
+
+function* idMaker() {
+  let index = 0;
+  while (true) {
+    index += 1;
+    yield index;
+  }
+}
+const gen = idMaker();
 
 try {
   if (process.platform === 'win32' && nativeTheme.shouldUseDarkColors === true) {
@@ -55,3 +70,49 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+const fileOut = process.env.FILE_OUTPUT_FOLDER;
+
+if (!fs.existsSync(fileOut)) {
+  fs.mkdirSync(fileOut);
+}
+
+const watcher = chokidar.watch(process.env.FILE_INPUT_FOLDER, {
+  depth: 0,
+  persistent: true,
+  ignoreInitial: true,
+  ignored: process.env.IGNORED_FILES,
+});
+watcher
+  .on('add', async (file) => {
+    console.log(`File ${file} has been added`);
+    const image = sharp(file);
+    const a = await image
+      .metadata()
+      .then((metadata) => {
+        let max;
+        if (metadata.width > metadata.height) {
+          max = metadata.width;
+        } else {
+          max = metadata.height;
+        }
+        const outputFile = `${fileOut}${gen.next().value}-edit${path.basename(file)}`;
+
+        return image
+          .resize({
+            width: max,
+            height: max,
+            fit: sharp.fit.contain,
+            background: {
+              r: 0, g: 0, b: 0, alpha: 0.0,
+            },
+          })
+          .png()
+          .toFile(outputFile, (err, info) => {
+            // console.log(this);
+
+          });
+      }).then(() => {
+        setTimeout(() => { fs.unlinkSync(file); }, 60000);
+      });
+  });
