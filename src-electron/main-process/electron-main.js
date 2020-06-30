@@ -1,10 +1,17 @@
-import { app, BrowserWindow, nativeTheme } from 'electron';
+import {
+  app, BrowserWindow, nativeTheme, ipcMain,
+} from 'electron';
 import sharp from 'sharp';
 import chokidar from 'chokidar';
+
 import path from 'path';
 import fs from 'fs';
 
+import Store from 'electron-store';
+
 require('dotenv').config();
+
+const store = new Store();
 
 function* idMaker() {
   let index = 0;
@@ -38,6 +45,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 600,
+    darkTheme: false,
     useContentSize: true,
     webPreferences: {
       // Change from /quasar.conf.js > electron > nodeIntegration;
@@ -69,6 +77,23 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+// IPC
+
+ipcMain.on('message', (event, data) => {
+  console.log(`Received: ${data}`);
+  event.sender.send('message', 'Hello interface!');
+});
+ipcMain.on('config', (event, data) => {
+  console.log(`Received: ${data}`);
+  store.set('CONFIG', data);
+  // event.sender.send('message', 'Hello interface!');
+});
+
+ipcMain.on('message-sync', (event, data) => {
+  console.log(`Received: ${data}`);
+  event.returnValue = 'Hello interface (synchronous)!';
 });
 
 const fileOut = process.env.FILE_OUTPUT_FOLDER;
