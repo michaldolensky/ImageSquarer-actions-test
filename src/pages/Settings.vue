@@ -43,7 +43,7 @@
                 Folder settings
               </div>
               <q-input
-                v-model="inputFolder"
+                v-model="config.folder.inputFolder.path"
                 slabel="Input folder"
                 :loading="config.folder.inputFolder.isLoading"
               >
@@ -60,7 +60,7 @@
                 </template>
               </q-input>
               <q-input
-                v-model="outputFolder"
+                v-model="config.folder.outputFolder.path"
                 label="Output folder"
                 :loading="config.folder.outputFolder.isLoading"
               >
@@ -84,23 +84,21 @@
               </div>
               Dimensions
               <q-input
-                v-model.number="width"
+                v-model.number="config.image.dimensions.width"
                 label="Width"
                 type="width"
-
                 style="max-width: 200px"
               />
               <q-input
-                v-model.number="height"
+                v-model.number="config.image.dimensions.height"
                 label="Height"
                 type="number"
 
                 style="max-width: 200px"
               />
               <q-input
-                v-model="secondColor"
+                v-model="config.image.backgroundColor.value"
                 label="BackgroundColor"
-                filled
                 :rules="['anyColor']"
                 hint="With validation"
                 class="my-input"
@@ -114,7 +112,7 @@
                       transition-show="scale"
                       transition-hide="scale"
                     >
-                      <q-color v-model="secondColor" />
+                      <q-color v-model="config.image.backgroundColor.value" />
                     </q-popup-proxy>
                   </q-icon>
                 </template>
@@ -138,7 +136,7 @@ export default {
   // name: 'PageName',
   data() {
     return {
-      tab: 'folder',
+      tab: 'image',
       splitterModel: 20,
       config: {
         folder: {
@@ -157,10 +155,10 @@ export default {
             width: 1000,
             height: 1000,
           },
-        },
-        backgroundColor: {
-          enabled: true,
-          value: '',
+          backgroundColor: {
+            enabled: true,
+            value: '#ffffff',
+          },
         },
       },
     };
