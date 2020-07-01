@@ -4,7 +4,6 @@
       <q-toolbar>
         <q-btn
           flat
-          dense
           round
           icon="menu"
           aria-label="Menu"
@@ -14,6 +13,10 @@
         <q-toolbar-title>
           Quasar App
         </q-toolbar-title>
+        <q-btn flat round
+               @click="$q.dark.toggle()"
+               :icon="$q.dark.isActive ? 'nights_stay' : 'wb_sunny'"
+        />
 
         <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
