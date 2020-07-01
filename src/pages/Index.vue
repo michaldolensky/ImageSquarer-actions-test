@@ -24,7 +24,7 @@ export default {
   },
   mounted() {
     ipcRenderer.on('message', (event, msg) => {
-      console.log(msg);
+      // console.log(msg);
       this.message = msg;
       event.reply('pong', 'ping-pong');
     });

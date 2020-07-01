@@ -1,11 +1,11 @@
 import {
   app, BrowserWindow, nativeTheme, ipcMain,
 } from 'electron';
-import sharp from 'sharp';
-import chokidar from 'chokidar';
-
-import path from 'path';
-import fs from 'fs';
+// import sharp from 'sharp';
+// import chokidar from 'chokidar';
+//
+// import path from 'path';
+// import fs from 'fs';
 
 import Store from 'electron-store';
 
@@ -82,62 +82,62 @@ app.on('activate', () => {
 // IPC
 
 ipcMain.on('message', (event, data) => {
-  console.log(`Received: ${data}`);
+  // console.log(`Received: ${data}`);
   event.sender.send('message', 'Hello interface!');
 });
 ipcMain.on('config', (event, data) => {
-  console.log(`Received: ${data}`);
-  store.set('CONFIG', data);
+  // console.log(`Received: ${data}`);
+  store.set('CONFIG', { test: data });
   // event.sender.send('message', 'Hello interface!');
 });
 
 ipcMain.on('message-sync', (event, data) => {
-  console.log(`Received: ${data}`);
+  // console.log(`Received: ${data}`);
   event.returnValue = 'Hello interface (synchronous)!';
 });
 
-const fileOut = process.env.FILE_OUTPUT_FOLDER;
-
-if (!fs.existsSync(fileOut)) {
-  fs.mkdirSync(fileOut);
-}
-
-const watcher = chokidar.watch(process.env.FILE_INPUT_FOLDER, {
-  depth: 0,
-  persistent: true,
-  ignoreInitial: true,
-  ignored: process.env.IGNORED_FILES,
-});
-watcher
-  .on('add', async (file) => {
-    console.log(`File ${file} has been added`);
-    const image = sharp(file);
-    const a = await image
-      .metadata()
-      .then((metadata) => {
-        let max;
-        if (metadata.width > metadata.height) {
-          max = metadata.width;
-        } else {
-          max = metadata.height;
-        }
-        const outputFile = `${fileOut}${gen.next().value}-edit${path.basename(file)}`;
-
-        return image
-          .resize({
-            width: max,
-            height: max,
-            fit: sharp.fit.contain,
-            background: {
-              r: 0, g: 0, b: 0, alpha: 0.0,
-            },
-          })
-          .png()
-          .toFile(outputFile, (err, info) => {
-            // console.log(this);
-
-          });
-      }).then(() => {
-        setTimeout(() => { fs.unlinkSync(file); }, 60000);
-      });
-  });
+// const fileOut = process.env.FILE_OUTPUT_FOLDER;
+//
+// if (!fs.existsSync(fileOut)) {
+//   fs.mkdirSync(fileOut);
+// }
+//
+// const watcher = chokidar.watch(process.env.FILE_INPUT_FOLDER, {
+//   depth: 0,
+//   persistent: true,
+//   ignoreInitial: true,
+//   ignored: process.env.IGNORED_FILES,
+// });
+// watcher
+//   .on('add', async (file) => {
+//     console.log(`File ${file} has been added`);
+//     const image = sharp(file);
+//     const a = await image
+//       .metadata()
+//       .then((metadata) => {
+//         let max;
+//         if (metadata.width > metadata.height) {
+//           max = metadata.width;
+//         } else {
+//           max = metadata.height;
+//         }
+//         const outputFile = `${fileOut}${gen.next().value}-edit${path.basename(file)}`;
+//
+//         return image
+//           .resize({
+//             width: max,
+//             height: max,
+//             fit: sharp.fit.contain,
+//             background: {
+//               r: 0, g: 0, b: 0, alpha: 0.0,
+//             },
+//           })
+//           .png()
+//           .toFile(outputFile, (err, info) => {
+//             // console.log(this);
+//
+//           });
+//       }).then(() => {
+//         setTimeout(() => { fs.unlinkSync(file); }, 60000);
+//       });
+//   });
