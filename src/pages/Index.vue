@@ -1,8 +1,11 @@
 <template>
   <q-page class="flex flex-center">
-    {{message}}
+    {{ message }}
     <br>
-    <q-input v-model="text" label="Standard" />
+    <q-input
+      v-model="text"
+      label="Standard"
+    />
   </q-page>
 </template>
 
@@ -22,17 +25,17 @@ export default {
       text: 'a',
     };
   },
+  watch: {
+    text(val) {
+      ipcRenderer.send('config', val);
+    },
+  },
   mounted() {
     ipcRenderer.on('message', (event, msg) => {
       // console.log(msg);
       this.message = msg;
       event.reply('pong', 'ping-pong');
     });
-  },
-  watch: {
-    text(val) {
-      ipcRenderer.send('config', val);
-    },
   },
 
 };
