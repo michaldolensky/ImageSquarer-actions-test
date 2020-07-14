@@ -38,7 +38,7 @@
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-vue": "^6.1.2",
     "husky": "^4.2.5",
-    "standard-version": "^8.0.1"
+    "standard-version": "^8.0.2"
   },
   "browserslist": [
     "last 10 Chrome versions",
