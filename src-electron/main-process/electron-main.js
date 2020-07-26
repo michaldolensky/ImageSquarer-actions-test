@@ -1,5 +1,5 @@
 import {
-  app, BrowserWindow, nativeTheme, ipcMain,
+  app, BrowserWindow, nativeTheme, ipcMain, screen,
 } from 'electron';
 import sharp from 'sharp';
 import chokidar from 'chokidar';
@@ -40,12 +40,23 @@ if (process.env.PROD) {
 let mainWindow;
 
 function createWindow() {
-  /**
-   * Initial window options
-   */
+  // display on second screen while in dev and second monitor is available
+  const displays = screen.getAllDisplays();
+  // eslint-disable-next-line max-len
+  const externalDisplay = displays.find((display) => display.bounds.x !== 0 || display.bounds.y !== 0);
+
+  let devOptions = {};
+  if (externalDisplay && process.env.NODE_ENV === 'development') {
+    devOptions = {
+      x: externalDisplay.bounds.x + 50,
+      y: externalDisplay.bounds.y + 50,
+    };
+  }
+
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 600,
+    ...devOptions,
     darkTheme: true,
     useContentSize: true,
     webPreferences: {
@@ -58,10 +69,9 @@ function createWindow() {
       // preload: path.resolve(__dirname, 'electron-preload.js')
     },
   });
+
   initIpcSettings(mainWindow, store);
-
   mainWindow.loadURL(process.env.APP_URL);
-
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
