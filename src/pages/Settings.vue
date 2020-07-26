@@ -39,43 +39,7 @@
             transition-next="jump-up"
           >
             <q-tab-panel name="folder">
-              <div class="text-h4 q-mb-md">
-                Folder settings
-              </div>
-              <q-input
-                v-model="config.folder.inputFolder.path"
-                slabel="Input folder"
-                :loading="config.folder.inputFolder.isLoading"
-              >
-                <template v-slot:prepend>
-                  <q-icon name="input" />
-                </template>
-                <template v-slot:after>
-                  <q-btn
-                    round
-                    dense
-                    flat
-                    icon="folder_open"
-                  />
-                </template>
-              </q-input>
-              <q-input
-                v-model="config.folder.outputFolder.path"
-                label="Output folder"
-                :loading="config.folder.outputFolder.isLoading"
-              >
-                <template v-slot:prepend>
-                  <q-icon name="exit_to_app" />
-                </template>
-                <template v-slot:after>
-                  <q-btn
-                    round
-                    dense
-                    flat
-                    icon="folder_open"
-                  />
-                </template>
-              </q-input>
+              <folderSettings />
             </q-tab-panel>
 
             <q-tab-panel name="image">
@@ -132,23 +96,18 @@
 </template>
 
 <script>
+import FolderSettings from 'components/Settings/FolderSettings';
+
+const { ipcRenderer } = require('electron');
+
 export default {
+  components: { FolderSettings },
   // name: 'PageName',
   data() {
     return {
       tab: 'image',
       splitterModel: 20,
       config: {
-        folder: {
-          inputFolder: {
-            path: '',
-            isLoading: true,
-          },
-          outputFolder: {
-            path: '',
-            isLoading: true,
-          },
-        },
         image: {
           dimensions: {
             enabled: true,

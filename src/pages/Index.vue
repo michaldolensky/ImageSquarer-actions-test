@@ -34,7 +34,12 @@ export default {
     ipcRenderer.on('message', (event, msg) => {
       // console.log(msg);
       this.message = msg;
-      event.reply('pong', 'ping-pong');
+      // event.reply('pong', 'ping-pong');
+    });
+
+    ipcRenderer.on('test', (event, msg) => {
+      console.log(msg);
+      // this.message = msg;
     });
   },
 
