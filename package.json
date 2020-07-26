@@ -75,5 +75,9 @@
         ]
       ]
     }
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/michaldolensky/ImageSquarer.git"
   }
 }
