@@ -90,43 +90,34 @@ export default {
   watch: {
     'dimensions.width': {
       handler(after) {
-        console.log(after);
-        ipcRenderer.send(`${channelPrefix}width`, after);
+        ipcRenderer.invoke(`${channelPrefix}width.set`, after);
       },
       deep: true,
     },
     'dimensions.height': {
       handler(after) {
-        ipcRenderer.send(`${channelPrefix}height`, after);
+        ipcRenderer.send(`${channelPrefix}height.set`, after);
       },
       deep: true,
     },
     'backgroundColor.value': {
       handler(after) {
-        ipcRenderer.send(`${channelPrefix}color`, after);
+        ipcRenderer.send(`${channelPrefix}color.set`, after);
       },
       deep: true,
     },
     'alpha.value': {
       handler(after) {
-        ipcRenderer.send(`${channelPrefix}alpha`, after);
+        ipcRenderer.send(`${channelPrefix}alpha.set`, after);
       },
       deep: true,
     },
   },
-  mounted() {
-    ipcRenderer.invoke(`${channelPrefix}width`).then((result) => {
-      this.dimensions.width = result;
-    });
-    ipcRenderer.invoke(`${channelPrefix}height`).then((result) => {
-      this.dimensions.height = result;
-    });
-    ipcRenderer.invoke(`${channelPrefix}color`).then((result) => {
-      this.backgroundColor.value = result;
-    });
-    ipcRenderer.invoke(`${channelPrefix}alpha`).then((result) => {
-      this.alpha.value = result;
-    });
+  async mounted() {
+    this.dimensions.width = await ipcRenderer.invoke(`${channelPrefix}width.get`);
+    this.dimensions.height = await ipcRenderer.invoke(`${channelPrefix}height.get`);
+    this.dimensions.color = await ipcRenderer.invoke(`${channelPrefix}color.get`);
+    this.dimensions.alpha = await ipcRenderer.invoke(`${channelPrefix}alpha.get`);
   },
 };
 </script>
