@@ -8,11 +8,26 @@ import path from 'path';
 import fs from 'fs';
 
 import Store from 'electron-store';
+import schema from './ConfigSchema.json';
 import { initIpcSettings } from './ipcSettings';
 
 require('dotenv').config();
 
-const store = new Store({ cwd: process.env.DEV_STORE_CONFIG_FOLDER });
+// console.dir({ cwd: process.env.DEV_STORE_CONFIG_FOLDER, schema }, { depth: null });
+const store = new Store({
+  schema,
+  clearInvalidConfig: true,
+  cwd: process.env.DEV_STORE_CONFIG_FOLDER,
+  // bypass issue https://github.com/sindresorhus/electron-store/issues/92
+  defaults: {
+    folder: {},
+    image: {},
+  },
+});
+
+store.onDidAnyChange((newValue, oldValue) => {
+  console.log(newValue, oldValue);
+});
 
 function* idMaker() {
   let index = 0;
@@ -25,6 +40,7 @@ const gen = idMaker();
 
 try {
   if (process.platform === 'win32' && nativeTheme.shouldUseDarkColors === true) {
+    // eslint-disable-next-line global-require
     require('fs').unlinkSync(require('path').join(app.getPath('userData'), 'DevTools Extensions'));
   }
 } catch (_) { }
@@ -89,18 +105,6 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
   }
-});
-
-// IPC
-
-ipcMain.on('message', (event, data) => {
-  // console.log(`Received: ${data}`);
-  event.sender.send('message', 'Hello interface!');
-});
-ipcMain.on('config', (event, data) => {
-  console.log(`Received: ${data}`);
-  store.set('CONFIG', { test: data });
-  // event.sender.send('message', 'Hello interface!');
 });
 
 const fileOut = process.env.FILE_OUTPUT_FOLDER;

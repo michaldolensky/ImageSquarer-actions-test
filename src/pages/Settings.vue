@@ -39,48 +39,11 @@
             transition-next="jump-up"
           >
             <q-tab-panel name="folder">
-              <folderSettings />
+              <FolderSettings />
             </q-tab-panel>
 
             <q-tab-panel name="image">
-              <div class="text-h4 q-mb-md">
-                Output Image settings
-              </div>
-              Dimensions
-              <q-input
-                v-model.number="config.image.dimensions.width"
-                label="Width"
-                type="width"
-                style="max-width: 200px"
-              />
-              <q-input
-                v-model.number="config.image.dimensions.height"
-                label="Height"
-                type="number"
-
-                style="max-width: 200px"
-              />
-              <q-input
-                v-model="config.image.backgroundColor.value"
-                label="BackgroundColor"
-                :rules="['anyColor']"
-                hint="With validation"
-                class="my-input"
-              >
-                <template v-slot:append>
-                  <q-icon
-                    name="colorize"
-                    class="cursor-pointer"
-                  >
-                    <q-popup-proxy
-                      transition-show="scale"
-                      transition-hide="scale"
-                    >
-                      <q-color v-model="config.image.backgroundColor.value" />
-                    </q-popup-proxy>
-                  </q-icon>
-                </template>
-              </q-input>
+              <ImageSettings />
             </q-tab-panel>
 
             <q-tab-panel name="notification">
@@ -97,29 +60,17 @@
 
 <script>
 import FolderSettings from 'components/Settings/FolderSettings';
+import ImageSettings from 'components/Settings/ImageSettings';
 
 const { ipcRenderer } = require('electron');
 
 export default {
-  components: { FolderSettings },
-  // name: 'PageName',
+  name: 'Settings',
+  components: { FolderSettings, ImageSettings },
   data() {
     return {
       tab: 'image',
       splitterModel: 20,
-      config: {
-        image: {
-          dimensions: {
-            enabled: true,
-            width: 1000,
-            height: 1000,
-          },
-          backgroundColor: {
-            enabled: true,
-            value: '#ffffff',
-          },
-        },
-      },
     };
   },
 };

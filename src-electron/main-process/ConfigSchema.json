@@ -1,0 +1,45 @@
+{
+    "folder": {
+      "type": "object",
+      "properties": {
+        "inputFolderPath": {
+          "type": "string",
+          "default": "input path",
+          "minLength": 0
+        },
+        "outputFolderPath": {
+          "type": "string",
+          "default": "output path",
+          "minLength": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "image": {
+      "type": "object",
+      "properties": {
+        "imageWidth": {
+          "type": "integer",
+          "default": 0,
+          "minimum": 0
+        },
+        "imageHeight": {
+          "default": 0,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "imageColor": {
+          "default": "",
+          "maxLength": 7,
+          "minLength": 0,
+          "type": "string"
+        },
+        "imageAlpha": {
+          "default": 0.0,
+          "minimum": 0.0,
+          "type": "number"
+        }
+      },
+      "additionalProperties": true
+    }
+}
