@@ -4,45 +4,69 @@
       Output Image settings
     </div>
     Dimension
-    <q-input
-      v-model.number="dimensions.width"
-      label="Width"
-      type="width"
-      style="max-width: 200px"
-    />
-    <q-input
-      v-model.number="dimensions.height"
-      label="Height"
-      type="number"
+    <div class="q-gutter-md row items-start">
+      <q-input
+        v-model.number="dimensions.width"
+        label="Width"
+        type="number"
+        style="max-width: 200px"
+      >
+        <template v-slot:append>
+          px
+        </template>
+      </q-input>
+      <span style="padding-top: 25px">X</span>
+      <q-input
+        v-model.number="dimensions.height"
+        label="Height"
+        type="number"
+        style="max-width: 200px"
+      >
+        <template v-slot:append>
+          px
+        </template>
+      </q-input>
+    </div>
+    <br>
+    Background color
 
-      style="max-width: 200px"
-    />
-    <q-input
-      v-model="backgroundColor.value"
-      label="BackgroundColor"
-      :rules="['anyColor']"
-      hint="With validation"
-      class="my-input"
-    >
-      <template v-slot:append>
-        <q-icon
-          name="colorize"
-          class="cursor-pointer"
-        >
-          <q-popup-proxy
-            transition-show="scale"
-            transition-hide="scale"
+    <div class="q-gutter-md row items-start">
+      <q-input
+        v-model="backgroundColor.value"
+        label="BackgroundColor"
+        :rules="['anyColor']"
+        class="my-input"
+      >
+        <template v-slot:append>
+          <q-icon
+            name="colorize"
+            class="cursor-pointer"
           >
-            <q-color v-model="backgroundColor.value" />
-          </q-popup-proxy>
-        </q-icon>
-      </template>
-    </q-input>
+            <q-popup-proxy
+              transition-show="scale"
+              transition-hide="scale"
+            >
+              <q-color v-model="backgroundColor.value" />
+            </q-popup-proxy>
+          </q-icon>
+        </template>
+      </q-input>
+      <q-input
+        v-model.number="alpha.value"
+        label="Alpha"
+        type="number"
+        max="1"
+        min="0"
+        step="0.1"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 const { ipcRenderer } = require('electron');
+
+const channelPrefix = 'image.';
 
 export default {
   name: 'ImageSettings',
@@ -61,32 +85,47 @@ export default {
         enabled: true,
         value: 0.0,
       },
-
     };
   },
   watch: {
     'dimensions.width': {
       handler(after) {
         console.log(after);
-        ipcRenderer.send('ImageWidth', after);
+        ipcRenderer.send(`${channelPrefix}width`, after);
       },
       deep: true,
     },
     'dimensions.height': {
       handler(after) {
-        ipcRenderer.send('ImageHeight', after);
+        ipcRenderer.send(`${channelPrefix}height`, after);
+      },
+      deep: true,
+    },
+    'backgroundColor.value': {
+      handler(after) {
+        ipcRenderer.send(`${channelPrefix}color`, after);
+      },
+      deep: true,
+    },
+    'alpha.value': {
+      handler(after) {
+        ipcRenderer.send(`${channelPrefix}alpha`, after);
       },
       deep: true,
     },
   },
   mounted() {
-    ipcRenderer.invoke('ImageWidth').then((result) => {
-      console.log(result);
+    ipcRenderer.invoke(`${channelPrefix}width`).then((result) => {
       this.dimensions.width = result;
     });
-    ipcRenderer.invoke('ImageHeight').then((result) => {
-      console.log(result);
+    ipcRenderer.invoke(`${channelPrefix}height`).then((result) => {
       this.dimensions.height = result;
+    });
+    ipcRenderer.invoke(`${channelPrefix}color`).then((result) => {
+      this.backgroundColor.value = result;
+    });
+    ipcRenderer.invoke(`${channelPrefix}alpha`).then((result) => {
+      this.alpha.value = result;
     });
   },
 };

@@ -18,26 +18,27 @@
     "image": {
       "type": "object",
       "properties": {
-        "imageWidth": {
+        "width": {
           "type": "integer",
-          "default": 0,
+          "default": 1200,
           "minimum": 0
         },
-        "imageHeight": {
-          "default": 0,
+        "height": {
+          "default": 1200,
           "minimum": 0,
           "type": "integer"
         },
-        "imageColor": {
-          "default": "",
+        "color": {
+          "default": "#ffffff",
           "maxLength": 7,
           "minLength": 0,
           "type": "string"
         },
-        "imageAlpha": {
+        "alpha": {
+          "type": "number",
           "default": 0.0,
           "minimum": 0.0,
-          "type": "number"
+          "maximum": 1
         }
       },
       "additionalProperties": true

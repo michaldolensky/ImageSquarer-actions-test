@@ -42,6 +42,8 @@
 <script>
 const { ipcRenderer } = require('electron');
 
+const channelPrefix = 'folder.';
+
 export default {
   name: 'FolderSettings',
   data() {
@@ -59,23 +61,23 @@ export default {
   watch: {
     'inputFolder.path': {
       handler(after) {
-        ipcRenderer.send('inputFolderPath', after);
+        ipcRenderer.send(`${channelPrefix}inputFolderPath`, after);
       },
       deep: true,
     },
     'outputFolder.path': {
       handler(after) {
-        ipcRenderer.send('outputFolderPath', after);
+        ipcRenderer.send(`${channelPrefix}outputFolderPath`, after);
       },
       deep: true,
     },
   },
   mounted() {
-    ipcRenderer.invoke('inputFolderPath').then((result) => {
+    ipcRenderer.invoke(`${channelPrefix}inputFolderPath`).then((result) => {
       console.log(result);
       this.inputFolder.path = result;
     });
-    ipcRenderer.invoke('outputFolderPath').then((result) => {
+    ipcRenderer.invoke(`${channelPrefix}outputFolderPath`).then((result) => {
       console.log(result);
       this.outputFolder.path = result;
     });
