@@ -13,19 +13,19 @@
     "kill-qusar-process": "taskkill /F /IM \"Quasar App.exe\""
   },
   "dependencies": {
-    "@quasar/extras": "^1.9.4",
+    "@quasar/extras": "^1.9.5",
     "chokidar": "^3.4.2",
     "core-js": "^3.6.5",
     "dotenv": "^8.2.0",
     "electron-store": "^6.0.0",
-    "quasar": "^1.12.13",
+    "quasar": "^1.13.1",
     "sharp": "^0.25.4",
     "vue-i18n": "^8.21.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^9.1.2",
     "@commitlint/config-conventional": "^9.1.2",
-    "@quasar/app": "^2.0.6",
+    "@quasar/app": "^2.0.8",
     "babel-eslint": "^10.0.1",
     "devtron": "^1.4.0",
     "electron": "^9.2.1",
@@ -77,7 +77,7 @@
     }
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/michaldolensky/ImageSquarer.git"
+    "type": "git",
+    "url": "https://github.com/michaldolensky/ImageSquarer.git"
   }
 }
