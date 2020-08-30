@@ -5,7 +5,7 @@
     </div>
     <q-input
       v-model="inputFolder.path"
-      slabel="Input folder"
+      label="Input folder"
       :loading="inputFolder.isLoading"
     >
       <template v-slot:prepend>
@@ -17,6 +17,7 @@
           dense
           flat
           icon="folder_open"
+          @click="openInputDialog"
         />
       </template>
     </q-input>
@@ -34,6 +35,7 @@
           dense
           flat
           icon="folder_open"
+          @click="openOutputDialog"
         />
       </template>
     </q-input>
@@ -50,37 +52,45 @@ export default {
     return {
       inputFolder: {
         path: '',
-        isLoading: true,
+        isLoading: false,
       },
       outputFolder: {
         path: '',
-        isLoading: true,
+        isLoading: false,
       },
     };
   },
   watch: {
     'inputFolder.path': {
       handler(after) {
-        ipcRenderer.send(`${channelPrefix}inputFolderPath`, after);
+        ipcRenderer.invoke(`${channelPrefix}inputFolder.set`, after);
       },
       deep: true,
     },
     'outputFolder.path': {
       handler(after) {
-        ipcRenderer.send(`${channelPrefix}outputFolderPath`, after);
+        ipcRenderer.invoke(`${channelPrefix}outputFolder.set`, after);
       },
       deep: true,
     },
   },
-  mounted() {
-    ipcRenderer.invoke(`${channelPrefix}inputFolderPath`).then((result) => {
-      console.log(result);
-      this.inputFolder.path = result;
-    });
-    ipcRenderer.invoke(`${channelPrefix}outputFolderPath`).then((result) => {
-      console.log(result);
-      this.outputFolder.path = result;
-    });
+  async mounted() {
+    this.inputFolder.path = await ipcRenderer.invoke(`${channelPrefix}inputFolder.get`);
+    this.outputFolder.path = await ipcRenderer.invoke(`${channelPrefix}outputFolder.get`);
+  },
+  methods: {
+    async openInputDialog() {
+      this.inputFolder.isLoading = true;
+      const result = await ipcRenderer.invoke(`${channelPrefix}inputFolder.select`);
+      this.inputFolder.isLoading = false;
+      if (!result.canceled) [this.inputFolder.path] = result.filePaths;
+    },
+    async openOutputDialog() {
+      this.outputFolder.isLoading = true;
+      const result = await ipcRenderer.invoke(`${channelPrefix}outputFolder.select`);
+      this.outputFolder.isLoading = false;
+      if (!result.canceled) [this.outputFolder.path] = result.filePaths;
+    },
   },
 };
 </script>
