@@ -69,7 +69,7 @@ export default {
   components: { FolderSettings, ImageSettings },
   data() {
     return {
-      tab: 'image',
+      tab: 'folder',
       splitterModel: 20,
     };
   },
