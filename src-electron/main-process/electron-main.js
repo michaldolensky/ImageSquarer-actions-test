@@ -8,10 +8,14 @@ import path from 'path';
 import fs from 'fs';
 
 import Store from 'electron-store';
+import { idMaker } from './utils/id-maker';
 import schema from './ConfigSchema.json';
 import { initIpcSettings } from './ipcSettings';
 
 require('dotenv').config();
+
+const gen = idMaker();
+let watcher;
 
 // console.dir({ cwd: process.env.DEV_STORE_CONFIG_FOLDER, schema }, { depth: null });
 const store = new Store({
