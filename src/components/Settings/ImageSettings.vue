@@ -96,19 +96,19 @@ export default {
     },
     'dimensions.height': {
       handler(after) {
-        ipcRenderer.send(`${channelPrefix}height.set`, after);
+        ipcRenderer.invoke(`${channelPrefix}height.set`, after);
       },
       deep: true,
     },
     'backgroundColor.value': {
       handler(after) {
-        ipcRenderer.send(`${channelPrefix}color.set`, after);
+        ipcRenderer.invoke(`${channelPrefix}color.set`, after);
       },
       deep: true,
     },
     'alpha.value': {
       handler(after) {
-        ipcRenderer.send(`${channelPrefix}alpha.set`, after);
+        ipcRenderer.invoke(`${channelPrefix}alpha.set`, after);
       },
       deep: true,
     },
