@@ -42,6 +42,8 @@
   </div>
 </template>
 <script>
+import { debounce } from 'quasar';
+
 const { ipcRenderer } = require('electron');
 
 const channelPrefix = 'folder.';
@@ -62,15 +64,15 @@ export default {
   },
   watch: {
     'inputFolder.path': {
-      handler(after) {
+      handler: debounce((after) => {
         ipcRenderer.invoke(`${channelPrefix}inputFolder.set`, after);
-      },
+      }),
       deep: true,
     },
     'outputFolder.path': {
-      handler(after) {
+      handler: debounce((after) => {
         ipcRenderer.invoke(`${channelPrefix}outputFolder.set`, after);
-      },
+      }),
       deep: true,
     },
   },

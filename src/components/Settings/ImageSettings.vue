@@ -64,6 +64,8 @@
 </template>
 
 <script>
+import { debounce } from 'quasar';
+
 const { ipcRenderer } = require('electron');
 
 const channelPrefix = 'image.';
@@ -89,27 +91,27 @@ export default {
   },
   watch: {
     'dimensions.width': {
-      handler(after) {
+      handler: debounce((after) => {
         ipcRenderer.invoke(`${channelPrefix}width.set`, after);
-      },
+      }),
       deep: true,
     },
     'dimensions.height': {
-      handler(after) {
+      handler: debounce((after) => {
         ipcRenderer.invoke(`${channelPrefix}height.set`, after);
-      },
+      }),
       deep: true,
     },
     'backgroundColor.value': {
-      handler(after) {
+      handler: debounce((after) => {
         ipcRenderer.invoke(`${channelPrefix}color.set`, after);
-      },
+      }),
       deep: true,
     },
     'alpha.value': {
-      handler(after) {
+      handler: debounce((after) => {
         ipcRenderer.invoke(`${channelPrefix}alpha.set`, after);
-      },
+      }),
       deep: true,
     },
   },
