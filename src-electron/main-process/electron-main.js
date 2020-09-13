@@ -1,5 +1,5 @@
 import {
-  app, BrowserWindow, nativeTheme, ipcMain, screen,
+  app, BrowserWindow, nativeTheme, screen,
 } from 'electron';
 import sharp from 'sharp';
 import chokidar from 'chokidar';
@@ -28,19 +28,56 @@ const store = new Store({
     image: {},
   },
 });
+const initWatcher = () => {
+  const fileIn = store.get('folder.inputFolderPath');
+  const fileOut = store.get('folder.outputFolderPath');
+  console.log(fileIn, fileOut);
 
-store.onDidAnyChange((newValue, oldValue) => {
-  console.log(newValue, oldValue);
-});
-
-function* idMaker() {
-  let index = 0;
-  while (true) {
-    index += 1;
-    yield index;
+  if (!fs.existsSync(fileOut)) {
+    fs.mkdirSync(fileOut);
   }
-}
-const gen = idMaker();
+  watcher = chokidar.watch(fileIn, {
+    depth: 0,
+    persistent: true,
+    ignoreInitial: true,
+    ignored: process.env.IGNORED_FILES,
+  });
+
+  watcher
+    .on('add', async (file) => {
+      console.log(`File ${file} has been added`);
+      const image = sharp(file);
+      const a = await image
+        .metadata()
+        .then((metadata) => {
+          let max;
+          if (metadata.width > metadata.height) {
+            max = metadata.width;
+          } else {
+            max = metadata.height;
+          }
+          const outputFile = `${fileOut}\\${gen.next().value}-edit${path.basename(file)}`;
+          console.log(outputFile);
+
+          return image
+            .resize({
+              width: max,
+              height: max,
+              fit: sharp.fit.contain,
+              background: {
+                r: 255, g: 255, b: 255, alpha: 0.0,
+              },
+            })
+            .png()
+            .toFile(outputFile, (err, info) => {
+              // console.log(this);
+
+            });
+        }).then(() => {
+          // setTimeout(() => { fs.unlinkSync(file); }, 60000);
+        });
+    });
+};
 
 try {
   if (process.platform === 'win32' && nativeTheme.shouldUseDarkColors === true) {
@@ -95,6 +132,7 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+  initWatcher();
 }
 
 app.on('ready', createWindow);
@@ -111,48 +149,7 @@ app.on('activate', () => {
   }
 });
 
-const fileOut = process.env.FILE_OUTPUT_FOLDER;
-
-if (!fs.existsSync(fileOut)) {
-  fs.mkdirSync(fileOut);
-}
-
-const watcher = chokidar.watch(process.env.FILE_INPUT_FOLDER, {
-  depth: 0,
-  persistent: true,
-  ignoreInitial: true,
-  ignored: process.env.IGNORED_FILES,
+store.onDidAnyChange((newValue, oldValue) => {
+  watcher.close().then(() => console.log('watacher closed'));
+  initWatcher();
 });
-watcher
-  .on('add', async (file) => {
-    console.log(`File ${file} has been added`);
-    const image = sharp(file);
-    const a = await image
-      .metadata()
-      .then((metadata) => {
-        let max;
-        if (metadata.width > metadata.height) {
-          max = metadata.width;
-        } else {
-          max = metadata.height;
-        }
-        const outputFile = `${fileOut}${gen.next().value}-edit${path.basename(file)}`;
-
-        return image
-          .resize({
-            width: max,
-            height: max,
-            fit: sharp.fit.contain,
-            background: {
-              r: 255, g: 255, b: 255, alpha: 0.0,
-            },
-          })
-          .png()
-          .toFile(outputFile, (err, info) => {
-            // console.log(this);
-
-          });
-      }).then(() => {
-        setTimeout(() => { fs.unlinkSync(file); }, 60000);
-      });
-  });
