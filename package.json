@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^9.1.2",
-    "@commitlint/config-conventional": "^9.1.2",
+    "@commitlint/config-conventional": "^11.0.0",
     "@quasar/app": "^2.1.0",
     "babel-eslint": "^10.0.1",
     "devtron": "^1.4.0",
