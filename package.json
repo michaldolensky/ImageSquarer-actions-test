@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.9.9",
-    "chokidar": "^3.4.2",
+    "chokidar": "^3.4.3",
     "core-js": "^3.6.5",
     "dotenv": "^8.2.0",
     "electron-store": "^6.0.1",
