@@ -8,10 +8,10 @@
       label="Input folder"
       :loading="inputFolder.isLoading"
     >
-      <template v-slot:prepend>
+      <template #prepend>
         <q-icon name="input" />
       </template>
-      <template v-slot:after>
+      <template #after>
         <q-btn
           round
           dense
@@ -26,10 +26,10 @@
       label="Output folder"
       :loading="outputFolder.isLoading"
     >
-      <template v-slot:prepend>
+      <template #prepend>
         <q-icon name="exit_to_app" />
       </template>
-      <template v-slot:after>
+      <template #after>
         <q-btn
           round
           dense

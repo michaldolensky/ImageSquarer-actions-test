@@ -11,7 +11,7 @@
         type="number"
         style="max-width: 200px"
       >
-        <template v-slot:append>
+        <template #append>
           px
         </template>
       </q-input>
@@ -22,7 +22,7 @@
         type="number"
         style="max-width: 200px"
       >
-        <template v-slot:append>
+        <template #append>
           px
         </template>
       </q-input>
@@ -37,7 +37,7 @@
         :rules="['anyColor']"
         class="my-input"
       >
-        <template v-slot:append>
+        <template #append>
           <q-icon
             name="colorize"
             class="cursor-pointer"
