@@ -17,8 +17,7 @@ require('dotenv').config();
 const gen = idMaker();
 let watcher;
 
-// console.dir({ cwd: process.env.DEV_STORE_CONFIG_FOLDER, schema }, { depth: null });
-const store = new Store({
+const storeConfig = {
   schema,
   clearInvalidConfig: true,
   cwd: process.env.DEV_STORE_CONFIG_FOLDER,
@@ -27,7 +26,11 @@ const store = new Store({
     folder: {},
     image: {},
   },
-});
+};
+if (process.env.DEV) storeConfig.cwd = process.env.DEV_STORE_CONFIG_FOLDER;
+
+const store = new Store(storeConfig);
+
 const initWatcher = () => {
   const fileIn = store.get('folder.inputFolderPath');
   const fileOut = store.get('folder.outputFolderPath');
