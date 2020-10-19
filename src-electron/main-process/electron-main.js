@@ -40,7 +40,7 @@ const initWatcher = () => {
     depth: 0,
     persistent: true,
     ignoreInitial: true,
-    ignored: process.env.IGNORED_FILES,
+    ignored: `${fileIn}/*.crdownload*`,
   });
 
   watcher
