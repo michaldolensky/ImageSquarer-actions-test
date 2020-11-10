@@ -43,7 +43,7 @@ const initWatcher = () => {
     depth: 0,
     persistent: true,
     ignoreInitial: true,
-    ignored: `${fileIn}/*.crdownload*`,
+    ignored: [`${fileIn}/*.crdownload*`, `${fileIn}/*.tmp*`],
   });
 
   watcher
@@ -87,6 +87,7 @@ try {
     // eslint-disable-next-line global-require
     require('fs').unlinkSync(require('path').join(app.getPath('userData'), 'DevTools Extensions'));
   }
+// eslint-disable-next-line no-empty
 } catch (_) { }
 
 /**
@@ -94,6 +95,7 @@ try {
  * The reason we are setting it here is that the path needs to be evaluated at runtime
  */
 if (process.env.PROD) {
+  // eslint-disable-next-line no-underscore-dangle
   global.__statics = __dirname;
 }
 
