@@ -59,8 +59,14 @@ const initWatcher = () => {
           } else {
             max = metadata.height;
           }
-          const outputFile = `${fileOut}\\${gen.next().value}-edit${path.basename(file)}`;
-          console.log(outputFile);
+
+          const parsedInputFile = path.parse(file);
+
+          const outputFile = path.format({
+            dir: fileOut,
+            name: `${gen.next().value}-edit${parsedInputFile.name}`,
+            ext: '.png',
+          });
 
           return image
             .resize({
