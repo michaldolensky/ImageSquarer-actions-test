@@ -76,7 +76,10 @@ const initWatcher = () => {
               height: max,
               fit: sharp.fit.contain,
               background: {
-                r: 255, g: 255, b: 255, alpha: 0.0,
+                r: 255,
+                g: 255,
+                b: 255,
+                alpha: 1,
               },
             })
             .png()
