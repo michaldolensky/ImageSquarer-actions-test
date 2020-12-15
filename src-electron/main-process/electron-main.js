@@ -12,7 +12,8 @@ import { idMaker } from './utils/id-maker';
 import schema from './ConfigSchema.json';
 import { initIpcSettings } from './ipcSettings';
 
-require('dotenv').config();
+require('dotenv')
+  .config();
 
 const gen = idMaker();
 let watcher;
@@ -59,6 +60,7 @@ const initWatcher = () => {
           } else {
             max = metadata.height;
           }
+          if (max > 2000) max = 2000;
 
           const parsedInputFile = path.parse(file);
 
@@ -82,7 +84,8 @@ const initWatcher = () => {
               // console.log(this);
 
             });
-        }).then(() => {
+        })
+        .then(() => {
           // setTimeout(() => { fs.unlinkSync(file); }, 60000);
         });
     });
@@ -91,10 +94,13 @@ const initWatcher = () => {
 try {
   if (process.platform === 'win32' && nativeTheme.shouldUseDarkColors === true) {
     // eslint-disable-next-line global-require
-    require('fs').unlinkSync(require('path').join(app.getPath('userData'), 'DevTools Extensions'));
+    require('fs')
+      .unlinkSync(require('path')
+        .join(app.getPath('userData'), 'DevTools Extensions'));
   }
 // eslint-disable-next-line no-empty
-} catch (_) { }
+} catch (_) {
+}
 
 /**
  * Set `__statics` path to static files in production;
@@ -161,6 +167,7 @@ app.on('activate', () => {
 });
 
 store.onDidAnyChange((newValue, oldValue) => {
-  watcher.close().then(() => console.log('watacher closed'));
+  watcher.close()
+    .then(() => console.log('watacher closed'));
   initWatcher();
 });
