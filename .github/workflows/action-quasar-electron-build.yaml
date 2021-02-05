@@ -7,7 +7,7 @@ on:
     branches: [ master, dev ]
 
 jobs:
-  build-capacitor:
+  build-electron:
     runs-on: ${{ matrix.os-versions }}
     
     defaults:
@@ -27,7 +27,7 @@ jobs:
             node-version: ${{ matrix.node-version }}
       - run: yarn install && yarn global add @quasar/cli
       - run: yarn link quasar 
-      - run: quasar build -m electron -P always
+      - run: npx quasar build -m electron -P always
       - run: zip -r  ./electron-${{ github.run_number }}.zip ./dist/electron/* 
     
       - name: Create a Release
