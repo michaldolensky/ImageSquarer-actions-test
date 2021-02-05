@@ -26,7 +26,7 @@ jobs:
         with:
             node-version: ${{ matrix.node-version }}
       - run: yarn install && yarn global add @quasar/cli
-      - run: node --no-sandbox node_modules/.bin/quasar build -m electron -P always
+      - run: node node_modules/.bin/quasar build -m electron -P always
       - run: zip -r  ./electron-${{ github.run_number }}.zip ./dist/electron/* 
     
       - name: Create a Release
